@@ -1,0 +1,39 @@
+{
+  "name": "@kevjava/tt-core",
+  "version": "1.0.0",
+  "description": "Core library for tt-time-tracker: scheduling, sessions, and database",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && cp src/schema.sql dist/",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "time-tracker",
+    "scheduling",
+    "sessions",
+    "sqlite"
+  ],
+  "author": "Kevin",
+  "license": "MIT",
+  "dependencies": {
+    "@kevjava/task-parser": "file:../task-parser",
+    "better-sqlite3": "^9.2.2",
+    "date-fns": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.3.0"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ]
+}
