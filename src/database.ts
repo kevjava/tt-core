@@ -308,6 +308,10 @@ export class TTDatabase {
         query += ` AND s.project = ?`;
         params.push(project);
       }
+      if (primaryTag) {
+        query += ` AND EXISTS (SELECT 1 FROM session_tags st WHERE st.session_id = s.id AND st.tag = ?)`;
+        params.push(primaryTag);
+      }
 
       query += ` ORDER BY s.start_time DESC LIMIT 1`;
 
@@ -315,10 +319,6 @@ export class TTDatabase {
       if (!row) return null;
 
       const tags = this.getSessionTags(row.id as number);
-
-      if (primaryTag && tags[0] !== primaryTag) {
-        return null;
-      }
 
       return this.rowToSession(row, tags);
     } catch (error) {

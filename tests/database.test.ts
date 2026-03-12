@@ -299,6 +299,36 @@ describe('TTDatabase', () => {
       const found = db.findPausedSessionToResume('Paused work', undefined, 'different-tag');
       expect(found).toBeNull();
     });
+
+    test('findPausedSessionToResume finds older session when most recent lacks the tag', () => {
+      // Most recent paused session — does NOT have the target tag
+      const newerStart = new Date('2024-01-01T11:00:00');
+      const newerId = db.insertSession({
+        startTime: newerStart,
+        endTime: new Date('2024-01-01T12:00:00'),
+        description: 'Feature work',
+        project: 'projectX',
+        state: 'paused' as SessionState,
+      });
+      db.insertSessionTags(newerId, ['design']);
+
+      // Older paused session — DOES have the target tag
+      const olderStart = new Date('2024-01-01T09:00:00');
+      const olderId = db.insertSession({
+        startTime: olderStart,
+        endTime: new Date('2024-01-01T10:00:00'),
+        description: 'Feature work',
+        project: 'projectX',
+        state: 'paused' as SessionState,
+      });
+      db.insertSessionTags(olderId, ['coding']);
+
+      // Without the fix, this returned null because the most recent session
+      // had the wrong primary tag and the search stopped there.
+      const found = db.findPausedSessionToResume('Feature work', 'projectX', 'coding');
+      expect(found).not.toBeNull();
+      expect(found!.id).toBe(olderId);
+    });
   });
 
   describe('Continuation Chains', () => {
