@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@kevjava/task-parser": "file:../task-parser",
-    "better-sqlite3": "^9.2.2",
+    "better-sqlite3": "^12.10.0",
     "date-fns": "^3.0.0"
   },
   "devDependencies": {
